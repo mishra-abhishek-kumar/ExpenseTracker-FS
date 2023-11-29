@@ -1,13 +1,48 @@
 const inputExpense = document.getElementById('exp-amt');
 const inputDescription = document.getElementById('desc');
 const inputCategory = document.getElementById('expense-cat');
-const userList = document.getElementById('users');
+const expenseList = document.getElementById('expenses');
 const form = document.getElementById('form');
 const msg = document.querySelector('.msg');
 
 form.addEventListener('submit', addExpense);
-userList.addEventListener('click', removeExpense);
-userList.addEventListener('click', editExpense);
+expenseList.addEventListener('click', removeExpense);
+expenseList.addEventListener('click', editExpense);
+
+window.addEventListener('DOMContentLoaded', () => {
+    const localStorageObj = localStorage;
+    const localStorageKeys = Object.keys(localStorageObj);
+
+    for (let i = 0; i < localStorageKeys.length; i++) {
+        const expenseDetailObj = JSON.parse(localStorageObj[localStorageKeys[i]]);
+        displayExpenseDetails(expenseDetailObj);
+    }
+})
+
+function displayExpenseDetails(expenseObj) {
+    //Creating different elements to be added in DOM
+    const li = document.createElement('li');
+    const delBtn = document.createElement('input');
+    const editBtn = document.createElement('input');
+
+    //Creating Delete button
+    delBtn.className = 'del float-right';
+    delBtn.setAttribute('type', "button");
+    delBtn.setAttribute('value', "DELETE");
+
+    //Creating Edit button
+    editBtn.className = 'edit float-right';
+    editBtn.setAttribute('type', "button");
+    editBtn.setAttribute('value', "EDIT");
+
+    //Appending all above 3 elements
+    li.appendChild(document.createTextNode(`${expenseObj.inputExpense} - ${expenseObj.inputDescription} - ${expenseObj.inputCategory}`));
+    li.appendChild(delBtn);
+    li.appendChild(editBtn);
+
+    //appendimg the li to ul inside DOM
+    expenseList.appendChild(li);
+}
 
 function addExpense(e) {
     e.preventDefault();
@@ -36,13 +71,13 @@ function addExpense(e) {
 
         //Appending all above 3 elements
         li.appendChild(document.createTextNode(`${inputExpense.value} - ${inputDescription.value} - ${inputCategory.value}`));
-        li.appendChild(delBtn); 
+        li.appendChild(delBtn);
         li.appendChild(editBtn);
-  
+
 
         //appendimg the li to ul inside DOM
-        userList.appendChild(li);
-    
+        expenseList.appendChild(li);
+
         //Storing user Data as an object
         const expenseList = {
             inputExpense: `${inputExpense.value}`,
@@ -61,26 +96,22 @@ function addExpense(e) {
 }
 
 function removeExpense(e) {
-    if(e.target.classList.contains('del')) {
-        if(confirm('Are you sure!')) {
+    if (e.target.classList.contains('del')) {
         partsString = e.target.parentElement.innerText.split('-');
         food_category = partsString[2].trim();
         console.log(food_category);
-        userList.removeChild(e.target.parentElement);
+        expenseList.removeChild(e.target.parentElement);
         localStorage.removeItem(food_category);
-        }
     }
 }
 
 function editExpense(e) {
-    if(e.target.classList.contains('edit')) {
-        if(confirm('Are you sure')) {
-            partsString = e.target.parentElement.innerText.split('-');
-            inputExpense.value = partsString[0].trim();
-            inputDescription.value = partsString[1].trim();
-            inputCategory.value = partsString[2].trim();
-            localStorage.removeItem(partsString[2].trim());
-            userList.removeChild(e.target.parentElement);
-        }
+    if (e.target.classList.contains('edit')) {
+        partsString = e.target.parentElement.innerText.split('-');
+        inputExpense.value = partsString[0].trim();
+        inputDescription.value = partsString[1].trim();
+        inputCategory.value = partsString[2].trim();
+        localStorage.removeItem(partsString[2].trim());
+        expenseList.removeChild(e.target.parentElement);
     }
 }
