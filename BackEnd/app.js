@@ -11,18 +11,18 @@ const bodyParser = require('body-parser');
 const sequelize = require('./util/dbConnect');
 const Expense = require('./models/Expense'); //Without this table was not getting created
 
+//imports requires for different routes
+const createExpenserRoute = require('./routes/add-expense');
+
 const app = express();
 
 app.use(bodyParser.json());
 
-app.use('/', (req, res, next) => {
-    console.log("Getting Response");
-});
+app.use('/', createExpenserRoute);
 
 const PORT = process.env.PORT || 4001;
 sequelize.sync()
     .then(result => {
-        console.log(result);
         app.listen(PORT, () => {
             console.log("Listening on PORT:", PORT);
         });
