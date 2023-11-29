@@ -13,12 +13,14 @@ const Expense = require('./models/Expense'); //Without this table was not gettin
 
 //imports requires for different routes
 const createExpenserRoute = require('./routes/add-expense');
+const getExpenserRoute = require('./routes/get-expense');
 
 const app = express();
 
 app.use(bodyParser.json());
 
 app.use('/', createExpenserRoute);
+app.use('/', getExpenserRoute);
 
 const PORT = process.env.PORT || 4001;
 sequelize.sync()
