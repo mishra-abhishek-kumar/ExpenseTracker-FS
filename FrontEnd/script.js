@@ -44,7 +44,7 @@ function displayExpenseDetails(expenseObj) {
     expenseList.appendChild(li);
 }
 
-function addExpense(e) {
+async function addExpense(e) {
     e.preventDefault();
 
     if (inputExpense.value === '' || inputDescription.value === '' || inputCategory.value === '') {
@@ -79,14 +79,19 @@ function addExpense(e) {
         expenseList.appendChild(li);
 
         //Storing user Data as an object
-        const expenseList = {
-            inputExpense: `${inputExpense.value}`,
-            inputDescription: `${inputDescription.value}`,
-            inputCategory: `${inputCategory.value}`
+        const expenseObj = {
+            amt: `${inputExpense.value}`,
+            description: `${inputDescription.value}`,
+            category: `${inputCategory.value}`
         }
 
-        //setting localStorage with userData
-        localStorage.setItem(inputCategory.value, JSON.stringify(expenseList));
+        try {
+            const response = await axios.post('http://localhost:4000/add-expense', expenseObj);
+            li.setAttribute("id", response.data.id);
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
 
         inputExpense.value = '';
         inputDescription.value = '';

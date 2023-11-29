@@ -21,6 +21,10 @@ const app = express();
 
 app.use(bodyParser.json());
 
+//import required to allow CORS origin connection
+const cors = require("cors");
+app.use(cors());
+
 app.use('/', createExpenserRoute);
 app.use('/', getExpenserRoute);
 app.use('/', deleteExpenserRoute);
