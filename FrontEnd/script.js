@@ -118,7 +118,11 @@ function editExpense(e) {
         inputExpense.value = partsString[0].trim();
         inputDescription.value = partsString[1].trim();
         inputCategory.value = partsString[2].trim();
-        localStorage.removeItem(partsString[2].trim());
-        expenseList.removeChild(e.target.parentElement);
+        try {
+            const response = axios.delete(`http://localhost:4000/delete-expense/${e.target.parentElement.id}`);
+            expenseList.removeChild(e.target.parentElement);
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
