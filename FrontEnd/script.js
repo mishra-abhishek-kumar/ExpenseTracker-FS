@@ -103,11 +103,12 @@ async function addExpense(e) {
 
 function removeExpense(e) {
     if (e.target.classList.contains('del')) {
-        partsString = e.target.parentElement.innerText.split('-');
-        food_category = partsString[2].trim();
-        console.log(food_category);
-        expenseList.removeChild(e.target.parentElement);
-        localStorage.removeItem(food_category);
+        try {
+            const response = axios.delete(`http://localhost:4000/delete-expense/${e.target.parentElement.id}`);
+            expenseList.removeChild(e.target.parentElement);
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 
