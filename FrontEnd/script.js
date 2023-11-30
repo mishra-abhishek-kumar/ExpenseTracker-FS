@@ -10,13 +10,13 @@ expenseList.addEventListener('click', removeExpense);
 expenseList.addEventListener('click', editExpense);
 
 window.addEventListener('DOMContentLoaded', () => {
-    const localStorageObj = localStorage;
-    const localStorageKeys = Object.keys(localStorageObj);
-
-    for (let i = 0; i < localStorageKeys.length; i++) {
-        const expenseDetailObj = JSON.parse(localStorageObj[localStorageKeys[i]]);
-        displayExpenseDetails(expenseDetailObj);
-    }
+    axios.get('http://localhost:4000/get-expense')
+        .then(expenses => {
+            for(let i=0; i<expenses.data.length; i++) {
+                displayExpenseDetails(expenses.data[i]);
+            }
+        })
+        .catch(err => console.log(err))
 })
 
 function displayExpenseDetails(expenseObj) {
@@ -36,9 +36,10 @@ function displayExpenseDetails(expenseObj) {
     editBtn.setAttribute('value', "EDIT");
 
     //Appending all above 3 elements
-    li.appendChild(document.createTextNode(`${expenseObj.inputExpense} - ${expenseObj.inputDescription} - ${expenseObj.inputCategory}`));
+    li.appendChild(document.createTextNode(`${expenseObj.amt} - ${expenseObj.description} - ${expenseObj.category}`));
     li.appendChild(delBtn);
     li.appendChild(editBtn);
+    li.setAttribute("id", expenseObj.id);
 
     //appendimg the li to ul inside DOM
     expenseList.appendChild(li);
