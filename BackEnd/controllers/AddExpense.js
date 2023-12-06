@@ -1,15 +1,16 @@
 const Expense = require('../models/Expense');
 
-const addExpense = (req, res) => {
-    Expense.create({
-        amt: req.body.amt,
-        description: req.body.description,
-        category: req.body.category
-    })
-    .then(expense => {
+const addExpense = async (req, res) => {
+    try {
+        const expense = await Expense.create({
+            amt: req.body.amt,
+            description: req.body.description,
+            category: req.body.category
+        });
         res.send(expense);
-    })
-    .catch(err => console.log(err))
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports = addExpense;

@@ -84,4 +84,5 @@ ul li {
     background-color: green;
     box-shadow: 2px 2px rgb(0, 82, 0);
     cursor: pointer;
+    color: white;
 }

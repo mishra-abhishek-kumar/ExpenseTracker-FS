@@ -1,15 +1,15 @@
 const Expense = require('../models/Expense');
 
-const deleteExpense = (req, res) => {
+const deleteExpense = async (req, res) => {
     const expenseId = req.params.expenseId;
-    Expense.findByPk(expenseId)
-        .then(expense => {
-            return expense.destroy();
-        })
-        .then(result => {
-            res.send(result);
-        })
-        .catch(err => console.log(err))
+
+    try {
+        const expense = await Expense.findByPk(expenseId);
+        const result = await expense.destroy();
+        res.send(result);   
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports = deleteExpense;

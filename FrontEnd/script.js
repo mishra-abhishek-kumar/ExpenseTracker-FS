@@ -9,14 +9,15 @@ form.addEventListener('submit', addExpense);
 expenseList.addEventListener('click', removeExpense);
 expenseList.addEventListener('click', editExpense);
 
-window.addEventListener('DOMContentLoaded', () => {
-    axios.get('http://localhost:4000/get-expense')
-        .then(expenses => {
-            for(let i=0; i<expenses.data.length; i++) {
-                displayExpenseDetails(expenses.data[i]);
-            }
-        })
-        .catch(err => console.log(err))
+window.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const expenses = await axios.get('http://localhost:4000/get-expense');
+        for(let i=0; i<expenses.data.length; i++) {
+            displayExpenseDetails(expenses.data[i]);
+        }
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 function displayExpenseDetails(expenseObj) {
@@ -101,10 +102,10 @@ async function addExpense(e) {
     }
 }
 
-function removeExpense(e) {
+async function removeExpense(e) {
     if (e.target.classList.contains('del')) {
         try {
-            const response = axios.delete(`http://localhost:4000/delete-expense/${e.target.parentElement.id}`);
+            const response = await axios.delete(`http://localhost:4000/delete-expense/${e.target.parentElement.id}`);
             expenseList.removeChild(e.target.parentElement);
         } catch (error) {
             console.log(error);
@@ -112,14 +113,14 @@ function removeExpense(e) {
     }
 }
 
-function editExpense(e) {
+async function editExpense(e) {
     if (e.target.classList.contains('edit')) {
         partsString = e.target.parentElement.innerText.split('-');
         inputExpense.value = partsString[0].trim();
         inputDescription.value = partsString[1].trim();
         inputCategory.value = partsString[2].trim();
         try {
-            const response = axios.delete(`http://localhost:4000/delete-expense/${e.target.parentElement.id}`);
+            const response = await axios.delete(`http://localhost:4000/delete-expense/${e.target.parentElement.id}`);
             expenseList.removeChild(e.target.parentElement);
         } catch (error) {
             console.log(error);
