@@ -31,7 +31,7 @@ app.use('/', deleteExpenserRoute);
 app.use('/', editExpenserRoute);
 
 const PORT = process.env.PORT || 4001;
-sequelize.sync()
+sequelize.sync({force: true})
     .then(result => {
         app.listen(PORT, () => {
             console.log("Listening on PORT:", PORT);
